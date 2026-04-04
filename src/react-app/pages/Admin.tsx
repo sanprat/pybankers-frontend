@@ -145,7 +145,7 @@ export default function Admin() {
 
   // UI state
   const [saving, setSaving] = useState(false);
-  const [improving, setImproving] = useState(false);
+  const [aiLoading, setAiLoading] = useState<string | null>(null); // tracks which field is loading
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [activeTab, setActiveTab] = useState<'editor' | 'posts'>('editor');
 
@@ -194,24 +194,28 @@ export default function Admin() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // ── AI Improve ──
-  async function handleImprove() {
-    if (!content.trim()) { showMessage('error', 'Write some content first.'); return; }
-    setImproving(true);
+  // ── AI Actions ──
+  async function handleAI(field: 'title' | 'excerpt' | 'content', action: 'improve' | 'write') {
+    const loadingKey = `${field}-${action}`;
+    setAiLoading(loadingKey);
     try {
-      const res = await fetch(`${API_BASE}/api/admin/improve`, {
+      const res = await fetch(`${API_BASE}/api/admin/ai`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getCreds()}` },
-        body: JSON.stringify({ content, title }),
+        body: JSON.stringify({ action, field, title, excerpt, content }),
       });
-      const data = await res.json() as { improved?: string; error?: string };
+      const data = await res.json() as { result?: string; error?: string };
       if (!res.ok) throw new Error(data.error ?? 'AI failed');
-      setContent(data.improved ?? content);
-      showMessage('success', '✨ Content improved by AI!');
+
+      if (field === 'title') setTitle(data.result ?? title);
+      else if (field === 'excerpt') setExcerpt(data.result ?? excerpt);
+      else setContent(data.result ?? content);
+
+      showMessage('success', `✨ ${field.charAt(0).toUpperCase() + field.slice(1)} ${action === 'improve' ? 'improved' : 'written'} by AI!`);
     } catch (err) {
-      showMessage('error', err instanceof Error ? err.message : 'AI improve failed.');
+      showMessage('error', err instanceof Error ? err.message : 'AI request failed.');
     } finally {
-      setImproving(false);
+      setAiLoading(null);
     }
   }
 
@@ -310,7 +314,18 @@ export default function Admin() {
           <div className="admin-editor" role="tabpanel" aria-labelledby="tab-editor">
             <div className="admin-editor__form">
               <div className="admin-field">
-                <label htmlFor="post-title" className="admin-label">Title *</label>
+                <div className="admin-label-row">
+                  <label htmlFor="post-title" className="admin-label">Title *</label>
+                  <button
+                    type="button"
+                    className="btn btn-accent admin-ai-btn"
+                    onClick={() => handleAI('title', 'improve')}
+                    disabled={aiLoading !== null || !title.trim()}
+                    aria-label="Improve title with AI"
+                  >
+                    {aiLoading === 'title-improve' ? <><span className="spinner" /> Improving…</> : '🤖 Improve with AI'}
+                  </button>
+                </div>
                 <input
                   id="post-title"
                   type="text"
@@ -346,7 +361,29 @@ export default function Admin() {
               </div>
 
               <div className="admin-field">
-                <label htmlFor="post-excerpt" className="admin-label">Excerpt</label>
+                <div className="admin-label-row">
+                  <label htmlFor="post-excerpt" className="admin-label">Excerpt</label>
+                  <div className="admin-ai-btns">
+                    <button
+                      type="button"
+                      className="btn btn-accent admin-ai-btn"
+                      onClick={() => handleAI('excerpt', 'improve')}
+                      disabled={aiLoading !== null || !excerpt.trim()}
+                      aria-label="Improve excerpt with AI"
+                    >
+                      {aiLoading === 'excerpt-improve' ? <><span className="spinner" /> …</> : '🤖 Improve'}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-success admin-ai-btn"
+                      onClick={() => handleAI('excerpt', 'write')}
+                      disabled={aiLoading !== null || !title.trim()}
+                      aria-label="Write fresh excerpt with AI"
+                    >
+                      {aiLoading === 'excerpt-write' ? <><span className="spinner" /> Writing…</> : '✨ Write fresh'}
+                    </button>
+                  </div>
+                </div>
                 <input
                   id="post-excerpt"
                   type="text"
@@ -362,16 +399,27 @@ export default function Admin() {
               <div className="admin-field">
                 <div className="admin-label-row">
                   <label htmlFor="post-content" className="admin-label">Content * (HTML supported)</label>
-                  <button
-                    type="button"
-                    id="admin-ai-improve"
-                    className="btn btn-accent admin-ai-btn"
-                    onClick={handleImprove}
-                    disabled={improving || !content.trim()}
-                    aria-label="Improve content with AI"
-                  >
-                    {improving ? <><span className="spinner" /> Improving…</> : '🤖 Improve with AI'}
-                  </button>
+                  <div className="admin-ai-btns">
+                    <button
+                      type="button"
+                      id="admin-ai-improve"
+                      className="btn btn-accent admin-ai-btn"
+                      onClick={() => handleAI('content', 'improve')}
+                      disabled={aiLoading !== null || !content.trim()}
+                      aria-label="Improve content with AI"
+                    >
+                      {aiLoading === 'content-improve' ? <><span className="spinner" /> Improving…</> : '🤖 Improve'}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-success admin-ai-btn"
+                      onClick={() => handleAI('content', 'write')}
+                      disabled={aiLoading !== null || !title.trim()}
+                      aria-label="Write fresh content with AI"
+                    >
+                      {aiLoading === 'content-write' ? <><span className="spinner" /> Writing…</> : '✨ Write fresh'}
+                    </button>
+                  </div>
                 </div>
                 <textarea
                   id="post-content"

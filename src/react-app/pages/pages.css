@@ -1119,6 +1119,11 @@
   padding: 6px 14px;
 }
 
+.admin-ai-btns {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
 .admin-actions {
   display: flex;
   align-items: center;
