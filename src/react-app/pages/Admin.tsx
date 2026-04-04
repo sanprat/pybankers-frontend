@@ -2,6 +2,25 @@
 import { useState, useEffect } from 'react';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'https://pyworker.pybankers.com';
+const ADMIN_KEY = import.meta.env.VITE_ADMIN_KEY || 'admin';
+
+function hasAdminAccess(): boolean {
+  // Check sessionStorage first
+  if (sessionStorage.getItem('pb_admin_key') === ADMIN_KEY) return true;
+
+  // Check URL for ?k=KEY or /KEY path
+  const params = new URLSearchParams(window.location.search);
+  const key = params.get('k');
+
+  if (key === ADMIN_KEY) {
+    sessionStorage.setItem('pb_admin_key', ADMIN_KEY);
+    // Strip the key param from URL
+    window.history.replaceState({}, '', '/admin');
+    return true;
+  }
+
+  return false;
+}
 
 function getCreds(): string {
   return sessionStorage.getItem('pb_admin_creds') || '';
@@ -97,6 +116,20 @@ function LoginGate({ onLogin }: { onLogin: () => void }) {
 
 // ── Main Admin Panel ─────────────────────────────────────────
 export default function Admin() {
+  // Check for secret access key
+  if (!hasAdminAccess()) {
+    return (
+      <main className="page">
+        <div className="blog-detail-error" style={{ paddingTop: '120px' }}>
+          <div className="blog-detail-error__icon">🔍</div>
+          <h2>Page not found</h2>
+          <p>The page you're looking for doesn't exist.</p>
+          <a href="/" className="btn btn-primary" style={{ marginTop: '16px' }}>← Back to Home</a>
+        </div>
+      </main>
+    );
+  }
+
   const [authed, setAuthed] = useState(sessionStorage.getItem('pb_admin') === '1');
 
   const [posts, setPosts] = useState<Post[]>([]);
@@ -250,7 +283,7 @@ export default function Admin() {
           <button
             className="btn btn-ghost"
             id="admin-logout"
-              onClick={() => { sessionStorage.removeItem('pb_admin'); sessionStorage.removeItem('pb_admin_creds'); setAuthed(false); }}
+              onClick={() => { sessionStorage.removeItem('pb_admin'); sessionStorage.removeItem('pb_admin_creds'); sessionStorage.removeItem('pb_admin_key'); setAuthed(false); }}
           >Sign out</button>
         </div>
 
