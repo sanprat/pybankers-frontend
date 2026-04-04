@@ -5,30 +5,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap');
 
 :root {
-  /* Colors */
-  --color-bg: #0d1117;
-  --color-surface: #161b22;
-  --color-surface-2: #1c2128;
-  --color-border: #30363d;
-  --color-border-subtle: #21262d;
+  /* Colors — Light theme, green + black */
+  --color-bg: #ffffff;
+  --color-surface: #f8faf8;
+  --color-surface-2: #f0f4f0;
+  --color-border: #d1d9d1;
+  --color-border-subtle: #e5ebe5;
 
-  --color-text: #e6edf3;
-  --color-text-muted: #8b949e;
-  --color-text-subtle: #6e7681;
+  --color-text: #111111;
+  --color-text-muted: #555555;
+  --color-text-subtle: #888888;
 
-  --color-primary: #2563eb;
-  --color-primary-light: #3b82f6;
-  --color-primary-glow: rgba(37, 99, 235, 0.15);
-  --color-accent: #f59e0b;
-  --color-accent-light: #fbbf24;
-  --color-green: #22c55e;
-  --color-red: #ef4444;
+  --color-primary: #16a34a;
+  --color-primary-light: #22c55e;
+  --color-primary-glow: rgba(22, 163, 74, 0.1);
+  --color-accent: #111111;
+  --color-accent-light: #333333;
+  --color-green: #16a34a;
+  --color-red: #dc2626;
 
   /* Gradients */
-  --gradient-hero: linear-gradient(135deg, #0d1117 0%, #0f1f3a 50%, #0d1117 100%);
-  --gradient-card: linear-gradient(145deg, #161b22, #1c2128);
-  --gradient-text: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #f472b6 100%);
-  --gradient-accent: linear-gradient(135deg, #f59e0b, #ef4444);
+  --gradient-hero: linear-gradient(135deg, #ffffff 0%, #f0f8f0 50%, #ffffff 100%);
+  --gradient-card: linear-gradient(145deg, #ffffff, #f8faf8);
+  --gradient-text: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+  --gradient-accent: linear-gradient(135deg, #16a34a, #111111);
 
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -53,10 +53,10 @@
   --radius-full: 9999px;
 
   /* Shadows */
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
-  --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
-  --shadow-lg: 0 8px 32px rgba(0,0,0,0.6);
-  --shadow-glow: 0 0 40px rgba(37, 99, 235, 0.2);
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --shadow-glow: 0 0 40px rgba(22, 163, 74, 0.15);
 
   /* Transitions */
   --transition-fast: 150ms ease;
@@ -85,7 +85,7 @@ textarea, input { font-family: inherit; }
 
 /* ===== Scrollbar ===== */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-track { background: var(--color-surface); }
 ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: var(--radius-full); }
 ::-webkit-scrollbar-thumb:hover { background: var(--color-text-subtle); }
 
@@ -123,14 +123,14 @@ textarea, input { font-family: inherit; }
 
 .badge-primary {
   background: var(--color-primary-glow);
-  color: var(--color-primary-light);
-  border: 1px solid rgba(37, 99, 235, 0.3);
+  color: var(--color-primary);
+  border: 1px solid rgba(22, 163, 74, 0.2);
 }
 
 .badge-accent {
-  background: rgba(245, 158, 11, 0.1);
+  background: rgba(0, 0, 0, 0.05);
   color: var(--color-accent-light);
-  border: 1px solid rgba(245, 158, 11, 0.3);
+  border: 1px solid rgba(0, 0, 0, 0.15);
 }
 
 /* ===== Buttons ===== */
@@ -153,9 +153,9 @@ textarea, input { font-family: inherit; }
   border: 1px solid transparent;
 }
 .btn-primary:hover {
-  background: var(--color-primary-light);
+  background: #15803d;
   transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 4px 20px rgba(22, 163, 74, 0.3);
 }
 
 .btn-ghost {
@@ -170,14 +170,14 @@ textarea, input { font-family: inherit; }
 }
 
 .btn-accent {
-  background: linear-gradient(135deg, var(--color-accent), #ef4444);
+  background: var(--color-accent);
   color: #fff;
   border: 1px solid transparent;
 }
 .btn-accent:hover {
-  opacity: 0.9;
+  background: #333;
   transform: translateY(-1px);
-  box-shadow: 0 4px 20px rgba(245,158,11,0.35);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
 }
 
 .btn-success {
@@ -194,10 +194,10 @@ textarea, input { font-family: inherit; }
 .btn-danger {
   background: transparent;
   color: var(--color-red);
-  border: 1px solid rgba(239,68,68,0.3);
+  border: 1px solid rgba(220, 38, 38, 0.2);
 }
 .btn-danger:hover {
-  background: rgba(239,68,68,0.1);
+  background: rgba(220, 38, 38, 0.08);
 }
 
 .btn:disabled {
@@ -210,7 +210,7 @@ textarea, input { font-family: inherit; }
 .spinner {
   width: 20px;
   height: 20px;
-  border: 2px solid rgba(255,255,255,0.2);
+  border: 2px solid rgba(0,0,0,0.15);
   border-top-color: currentColor;
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
