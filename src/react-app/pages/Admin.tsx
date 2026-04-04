@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'https://pyworker.pybankers.com';
 
-function getPassword(): string {
-  return sessionStorage.getItem('pb_admin_pw') || '';
+function getCreds(): string {
+  return sessionStorage.getItem('pb_admin_creds') || '';
 }
 
 interface Post {
@@ -30,6 +30,7 @@ function slugify(text: string) {
 
 // ── Login Gate ──────────────────────────────────────────────
 function LoginGate({ onLogin }: { onLogin: () => void }) {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [checking, setChecking] = useState(false);
@@ -40,14 +41,14 @@ function LoginGate({ onLogin }: { onLogin: () => void }) {
     setError('');
     try {
       const res = await fetch(`${API_BASE}/api/posts?all=1`, {
-        headers: { Authorization: `Bearer ${password}` },
+        headers: { Authorization: `Bearer ${username}:${password}` },
       });
       if (res.ok) {
-        sessionStorage.setItem('pb_admin_pw', password);
+        sessionStorage.setItem('pb_admin_creds', `${username}:${password}`);
         sessionStorage.setItem('pb_admin', '1');
         onLogin();
       } else {
-        setError('Incorrect password. Try again.');
+        setError('Incorrect credentials. Try again.');
         setPassword('');
       }
     } catch {
@@ -64,6 +65,17 @@ function LoginGate({ onLogin }: { onLogin: () => void }) {
         <h1 className="admin-login__title">Admin Access</h1>
         <p className="admin-login__subtitle">PyBankers content management</p>
         <form className="admin-login__form" onSubmit={handleSubmit}>
+          <label htmlFor="admin-username" className="admin-login__label">Username</label>
+          <input
+            id="admin-username"
+            type="text"
+            className="admin-login__input"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+            placeholder="Enter username"
+            autoFocus
+            required
+          />
           <label htmlFor="admin-password" className="admin-login__label">Password</label>
           <input
             id="admin-password"
@@ -71,8 +83,7 @@ function LoginGate({ onLogin }: { onLogin: () => void }) {
             className="admin-login__input"
             value={password}
             onChange={e => setPassword(e.target.value)}
-            placeholder="Enter admin password"
-            autoFocus
+            placeholder="Enter password"
             required
           />
           {error && <p className="admin-login__error" role="alert">{error}</p>}
@@ -131,7 +142,7 @@ export default function Admin() {
   function loadPosts() {
     setLoadingPosts(true);
     fetch(`${API_BASE}/api/posts?all=1`, {
-      headers: { Authorization: `Bearer ${getPassword()}` },
+      headers: { Authorization: `Bearer ${getCreds()}` },
     })
       .then(r => r.json())
       .then((data: { results?: Post[] } | Post[]) => {
@@ -174,7 +185,7 @@ export default function Admin() {
     try {
       const res = await fetch(`${API_BASE}/api/admin/improve`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getPassword()}` },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getCreds()}` },
         body: JSON.stringify({ content, title }),
       });
       const data = await res.json() as { improved?: string; error?: string };
@@ -202,7 +213,7 @@ export default function Admin() {
         isEdit ? `${API_BASE}/api/admin/posts/${editingId}` : `${API_BASE}/api/admin/posts`,
         {
           method: isEdit ? 'PUT' : 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getPassword()}` },
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getCreds()}` },
           body: JSON.stringify(payload),
         }
       );
@@ -223,7 +234,7 @@ export default function Admin() {
     try {
       const res = await fetch(`${API_BASE}/api/admin/posts/${post.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getPassword()}` },
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getCreds()}` },
         body: JSON.stringify({ ...post, published: post.published ? 0 : 1 }),
       });
       if (!res.ok) throw new Error();
@@ -256,7 +267,7 @@ export default function Admin() {
           <button
             className="btn btn-ghost"
             id="admin-logout"
-              onClick={() => { sessionStorage.removeItem('pb_admin'); sessionStorage.removeItem('pb_admin_pw'); setAuthed(false); }}
+              onClick={() => { sessionStorage.removeItem('pb_admin'); sessionStorage.removeItem('pb_admin_creds'); setAuthed(false); }}
           >Sign out</button>
         </div>
 
