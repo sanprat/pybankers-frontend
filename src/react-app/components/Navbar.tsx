@@ -31,9 +31,6 @@ export default function Navbar() {
           <NavLink to="/contact" className={({ isActive }) => `navbar__link${isActive ? ' active' : ''}`}>
             Contact
           </NavLink>
-          <NavLink to="/admin" className={({ isActive }) => `navbar__link navbar__link--admin${isActive ? ' active' : ''}`}>
-            ⚙ Admin
-          </NavLink>
           <Link to="/blog" className="navbar__cta">Start Building →</Link>
         </div>
 
@@ -56,7 +53,6 @@ export default function Navbar() {
         <NavLink to="/blog" onClick={() => setMenuOpen(false)} className={({ isActive }) => `navbar__mobile-link${isActive ? ' active' : ''}`}>Blog</NavLink>
         <NavLink to="/about" onClick={() => setMenuOpen(false)} className={({ isActive }) => `navbar__mobile-link${isActive ? ' active' : ''}`}>About</NavLink>
         <NavLink to="/contact" onClick={() => setMenuOpen(false)} className={({ isActive }) => `navbar__mobile-link${isActive ? ' active' : ''}`}>Contact</NavLink>
-        <NavLink to="/admin" onClick={() => setMenuOpen(false)} className={({ isActive }) => `navbar__mobile-link${isActive ? ' active' : ''}`}>Admin</NavLink>
       </div>
     </nav>
   );

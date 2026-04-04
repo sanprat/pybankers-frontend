@@ -1,5 +1,6 @@
 // src/react-app/pages/Admin.tsx
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'https://pyworker.pybankers.com';
 
@@ -86,6 +87,22 @@ function LoginGate({ onLogin }: { onLogin: () => void }) {
 
 // ── Main Admin Panel ─────────────────────────────────────────
 export default function Admin() {
+  // Check for secret access cookie — without it, show 404
+  const hasAccess = document.cookie.includes('pb_admin_access=1');
+
+  if (!hasAccess) {
+    return (
+      <main className="page">
+        <div className="blog-detail-error" style={{ paddingTop: '120px' }}>
+          <div className="blog-detail-error__icon">🔍</div>
+          <h2>Page not found</h2>
+          <p>The page you're looking for doesn't exist.</p>
+          <Link to="/" className="btn btn-primary" style={{ marginTop: '16px' }}>← Back to Home</Link>
+        </div>
+      </main>
+    );
+  }
+
   const [authed, setAuthed] = useState(sessionStorage.getItem('pb_admin') === '1');
 
   const [posts, setPosts] = useState<Post[]>([]);
