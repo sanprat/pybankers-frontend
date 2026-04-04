@@ -28,7 +28,7 @@ export default function BlogDetail() {
   useEffect(() => {
     if (!slug) return;
     setLoading(true);
-    fetch(`${API_BASE}/posts/${slug}`)
+    fetch(`${API_BASE}/api/posts/${slug}`)
       .then(r => {
         if (!r.ok) throw new Error('Not found');
         return r.json();

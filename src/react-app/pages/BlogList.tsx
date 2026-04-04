@@ -14,7 +14,7 @@ export default function BlogList() {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${API_BASE}/posts`)
+    fetch(`${API_BASE}/api/posts`)
       .then(r => r.json())
       .then((data: { results?: Post[] } | Post[]) => {
         const arr = Array.isArray(data) ? data : data.results ?? [];

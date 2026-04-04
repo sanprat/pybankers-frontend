@@ -38,7 +38,7 @@ function LoginGate({ onLogin }: { onLogin: () => void }) {
     setChecking(true);
     setError('');
     try {
-      const res = await fetch(`${API_BASE}/posts?all=1`, {
+      const res = await fetch(`${API_BASE}/api/posts?all=1`, {
         headers: { Authorization: `Bearer ${password}` },
       });
       if (res.ok) {
@@ -113,7 +113,7 @@ export default function Admin() {
   // Load posts
   function loadPosts() {
     setLoadingPosts(true);
-    fetch(`${API_BASE}/posts?all=1`, {
+    fetch(`${API_BASE}/api/posts?all=1`, {
       headers: { Authorization: `Bearer ${getPassword()}` },
     })
       .then(r => r.json())
@@ -155,7 +155,7 @@ export default function Admin() {
     if (!content.trim()) { showMessage('error', 'Write some content first.'); return; }
     setImproving(true);
     try {
-      const res = await fetch(`${API_BASE}/admin/improve`, {
+      const res = await fetch(`${API_BASE}/api/admin/improve`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getPassword()}` },
         body: JSON.stringify({ content, title }),
@@ -182,7 +182,7 @@ export default function Admin() {
       const payload = { title, slug, excerpt, content, author, published: publish ? 1 : 0 };
       const isEdit = editingId !== null;
       const res = await fetch(
-        isEdit ? `${API_BASE}/admin/posts/${editingId}` : `${API_BASE}/admin/posts`,
+        isEdit ? `${API_BASE}/api/admin/posts/${editingId}` : `${API_BASE}/api/admin/posts`,
         {
           method: isEdit ? 'PUT' : 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getPassword()}` },
@@ -204,7 +204,7 @@ export default function Admin() {
   // ── Toggle publish ──
   async function togglePublish(post: Post) {
     try {
-      const res = await fetch(`${API_BASE}/admin/posts/${post.id}`, {
+      const res = await fetch(`${API_BASE}/api/admin/posts/${post.id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${getPassword()}` },
         body: JSON.stringify({ ...post, published: post.published ? 0 : 1 }),
