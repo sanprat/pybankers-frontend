@@ -287,7 +287,7 @@ export default function Admin() {
           <button
             className="btn btn-ghost"
             id="admin-logout"
-              onClick={() => { sessionStorage.removeItem('pb_admin'); sessionStorage.removeItem('pb_admin_creds'); sessionStorage.removeItem('pb_admin_key'); setAuthed(false); }}
+              onClick={() => { sessionStorage.removeItem('pb_admin'); sessionStorage.removeItem('pb_admin_creds'); setAuthed(false); }}
           >Sign out</button>
         </div>
 
