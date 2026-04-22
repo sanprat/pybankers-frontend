@@ -140,7 +140,7 @@ export default function Home() {
 
       <footer className="footer">
         <div className="container">
-          <p>© {new Date().getFullYear()} <strong>PyBankers</strong> · Build with AI, not code &nbsp;·&nbsp; <Link to="/admin">Admin</Link></p>
+          <p>© {new Date().getFullYear()} <strong>PyBankers</strong> · Build with AI, not code</p>
         </div>
       </footer>
     </main>
