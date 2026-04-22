@@ -22,7 +22,7 @@ export default function Contact() {
       <section className="contact-section">
         <div className="container">
           <div className="contact-grid">
-            <a href="mailto:sanprat@pybankers.com" className="contact-card" aria-label="Email us">
+            <a href="https://mail.google.com/mail/?to=sanprat@pybankers.com" target="_blank" rel="noopener noreferrer" className="contact-card" aria-label="Email us">
               <div className="contact-card__icon">📧</div>
               <h3 className="contact-card__title">Email</h3>
               <p className="contact-card__desc">sanprat@pybankers.com</p>
