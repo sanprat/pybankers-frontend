@@ -22,21 +22,21 @@ export default function Contact() {
       <section className="contact-section">
         <div className="container">
           <div className="contact-grid">
-            <a href="mailto:hello@pybankers.com" className="contact-card" aria-label="Email us">
+            <a href="mailto:sanprat@pybankers.com" className="contact-card" aria-label="Email us">
               <div className="contact-card__icon">📧</div>
               <h3 className="contact-card__title">Email</h3>
-              <p className="contact-card__desc">hello@pybankers.com</p>
+              <p className="contact-card__desc">sanprat@pybankers.com</p>
               <span className="contact-card__action">Send an email →</span>
             </a>
 
-            <a href="https://twitter.com/pybankers" target="_blank" rel="noopener noreferrer" className="contact-card" aria-label="Follow us on X">
+            <a href="https://x.com/pybankers" target="_blank" rel="noopener noreferrer" className="contact-card" aria-label="Follow us on X">
               <div className="contact-card__icon">🐦</div>
               <h3 className="contact-card__title">X (Twitter)</h3>
               <p className="contact-card__desc">@pybankers</p>
               <span className="contact-card__action">Follow us →</span>
             </a>
 
-            <a href="https://linkedin.com/company/pybankers" target="_blank" rel="noopener noreferrer" className="contact-card" aria-label="Connect on LinkedIn">
+            <a href="https://www.linkedin.com/in/sanprat-pybankers-a594b0405/" target="_blank" rel="noopener noreferrer" className="contact-card" aria-label="Connect on LinkedIn">
               <div className="contact-card__icon">💼</div>
               <h3 className="contact-card__title">LinkedIn</h3>
               <p className="contact-card__desc">PyBankers</p>
