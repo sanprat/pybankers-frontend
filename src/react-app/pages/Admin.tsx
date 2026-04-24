@@ -8,13 +8,20 @@ function hasAdminAccess(): boolean {
   // Check sessionStorage first
   if (sessionStorage.getItem('pb_admin_key') === ADMIN_KEY) return true;
 
-  // Check URL for ?k=KEY or /KEY path
+  // Check URL for ?k=KEY
   const params = new URLSearchParams(window.location.search);
   const key = params.get('k');
 
   if (key === ADMIN_KEY) {
     sessionStorage.setItem('pb_admin_key', ADMIN_KEY);
-    // Strip the key param from URL
+    window.history.replaceState({}, '', window.location.pathname);
+    return true;
+  }
+
+  // Check path-based key (e.g., /admins where 'admins' is the admin key)
+  const pathKey = window.location.pathname.split('/').pop();
+  if (pathKey === ADMIN_KEY) {
+    sessionStorage.setItem('pb_admin_key', ADMIN_KEY);
     window.history.replaceState({}, '', '/admin');
     return true;
   }
